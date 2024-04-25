@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,7 +18,7 @@ class MainApp extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 const Spacer(),
-                _WeatherTemperaturerature(),
+                _WeatherTemperature(),
                 Flexible(
                   child: Column(
                     children: [
@@ -38,7 +36,7 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class _WeatherTemperaturerature extends StatelessWidget {
+class _WeatherTemperature extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const defaultTemperature = '**℃';
@@ -49,7 +47,7 @@ class _WeatherTemperaturerature extends StatelessWidget {
       child: Placeholder(),
     );
 
-    final TemperatureTextGroup = Row(
+    final temperatureTextGroup = Row(
       children: [
         Expanded(
           child: Text(
@@ -73,7 +71,7 @@ class _WeatherTemperaturerature extends StatelessWidget {
         placeholder,
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
-          child: TemperatureTextGroup,
+          child: temperatureTextGroup,
         ),
       ],
     );
