@@ -17,13 +17,11 @@ class MainApp extends StatelessWidget {
             alignment: FractionalOffset.center,
             child: Column(
               children: <Widget>[
-                // Spacer, WeatherTmp, Flexibleで位置調整
                 const Spacer(),
                 _WeatherTmp(),
                 Flexible(
                   child: Column(
                     children: [
-                      // 80pixcelの間隔確保
                       const SizedBox(height: 80),
                       _Buttons(),
                     ],
