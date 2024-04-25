@@ -59,14 +59,14 @@ class _WeatherTmp extends StatelessWidget {
           child: Text(
             defaultTemp,
             textAlign: TextAlign.center,
-            style: tempTextStyle.merge(const TextStyle(color: Colors.blue)),
+            style: tempTextStyle.copyWith(color: Colors.blue),
           ),
         ),
         Expanded(
           child: Text(
             defaultTemp,
             textAlign: TextAlign.center,
-            style: tempTextStyle.merge(const TextStyle(color: Colors.red)),
+            style: tempTextStyle.copyWith(color: Colors.red),
           ),
         ),
       ],
