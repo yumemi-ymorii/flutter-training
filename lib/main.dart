@@ -9,7 +9,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: Scaffold(
         body: SizedBox.expand(
           child: FractionallySizedBox(
@@ -17,12 +17,12 @@ class MainApp extends StatelessWidget {
             alignment: FractionalOffset.center,
             child: Column(
               children: <Widget>[
-                const Spacer(),
+                Spacer(),
                 _WeatherTemperature(),
                 Flexible(
                   child: Column(
                     children: [
-                      const SizedBox(height: 80),
+                      SizedBox(height: 80),
                       _Buttons(),
                     ],
                   ),
@@ -37,6 +37,7 @@ class MainApp extends StatelessWidget {
 }
 
 class _WeatherTemperature extends StatelessWidget {
+  const _WeatherTemperature();
   @override
   Widget build(BuildContext context) {
     const defaultTemperature = '**℃';
@@ -79,6 +80,7 @@ class _WeatherTemperature extends StatelessWidget {
 }
 
 class _Buttons extends StatelessWidget {
+  const _Buttons();
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
