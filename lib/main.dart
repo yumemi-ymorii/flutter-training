@@ -86,11 +86,11 @@ class _Buttons extends StatelessWidget {
     final screenSize = MediaQuery.sizeOf(context);
     final textWidth = screenSize.width / 4;
 
-    final buttonGroup = Row(
+    return Row(
       children: [
         SizedBox(
           width: textWidth,
-          child: Align(
+          child: Center(
             child: TextButton(
               onPressed: () {},
               child: const Text('Close'),
@@ -99,7 +99,7 @@ class _Buttons extends StatelessWidget {
         ),
         SizedBox(
           width: textWidth,
-          child: Align(
+          child: Center(
             child: TextButton(
               onPressed: () {},
               child: const Text('Reload'),
@@ -108,7 +108,5 @@ class _Buttons extends StatelessWidget {
         ),
       ],
     );
-
-    return buttonGroup;
   }
 }
