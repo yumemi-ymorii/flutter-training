@@ -53,7 +53,6 @@ class _WeatherTmp extends StatelessWidget {
     );
 
     final tempTextGroup = Row(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
           child: Text(
@@ -73,7 +72,6 @@ class _WeatherTmp extends StatelessWidget {
     );
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         placeholder,
         Padding(
