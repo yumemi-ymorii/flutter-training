@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() {
   runApp(const MainApp());
@@ -36,8 +37,27 @@ class MainApp extends StatelessWidget {
   }
 }
 
+class WeatherIcon extends StatefulWidget {
+  final String weather;
+  WeatherIcon({required this.weather});
+
+  @override
+  _WeatherIcon createState() => _WeatherIcon();
+}
+
+class _WeatherIcon extends State<WeatherIcon> {
+  @override
+  Widget build(BuildContext context) {
+    final screenSize = MediaQuery.sizeOf(context);
+    final logoWidth = screenSize.width * 0.5;
+    return SvgPicture.asset('assets/${widget.weather}.svg',
+        width: logoWidth, height: logoWidth);
+  }
+}
+
 class _WeatherTemperature extends StatelessWidget {
   const _WeatherTemperature();
+
   @override
   Widget build(BuildContext context) {
     const defaultTemperature = '**℃';
@@ -69,7 +89,9 @@ class _WeatherTemperature extends StatelessWidget {
 
     return Column(
       children: [
-        placeholder,
+        WeatherIcon(
+          weather: 'cloudy',
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: temperatureTextGroup,
