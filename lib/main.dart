@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 void main() {
   runApp(const MainApp());
@@ -41,7 +43,6 @@ class _WeatherTmp extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
     final logoWidth = screenSize.width * 0.5;
-    final textWidth = logoWidth * 0.5;
 
     final theme = Theme.of(context);
 
@@ -53,24 +54,20 @@ class _WeatherTmp extends StatelessWidget {
     final tempTextGroup = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
-          width: textWidth,
-          child: Align(
-            child: Text(
-              '**℃',
-              style: theme.textTheme.labelLarge!
-                  .merge(const TextStyle(color: Colors.blue)),
-            ),
+        Expanded(
+          child: Text(
+            '**℃',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.labelLarge!
+                .merge(const TextStyle(color: Colors.blue)),
           ),
         ),
-        SizedBox(
-          width: textWidth,
-          child: Align(
-            child: Text(
-              '**℃',
-              style: theme.textTheme.labelLarge!
-                  .merge(const TextStyle(color: Colors.red)),
-            ),
+        Expanded(
+          child: Text(
+            '**℃',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.labelLarge!
+                .merge(const TextStyle(color: Colors.red)),
           ),
         ),
       ],
