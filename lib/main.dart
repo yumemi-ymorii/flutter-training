@@ -41,15 +41,12 @@ class MainApp extends StatelessWidget {
 class _WeatherTemperaturerature extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.sizeOf(context);
-    final logoWidth = screenSize.width * 0.5;
-
     const defaultTemperature = '**℃';
     final temperatureTextStyle = Theme.of(context).textTheme.labelLarge!;
 
-    final placeholder = SizedBox.square(
-      dimension: logoWidth,
-      child: const Placeholder(),
+    const placeholder = AspectRatio(
+      aspectRatio: 1,
+      child: Placeholder(),
     );
 
     final TemperatureTextGroup = Row(
