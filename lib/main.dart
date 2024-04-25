@@ -44,7 +44,8 @@ class _WeatherTmp extends StatelessWidget {
     final screenSize = MediaQuery.sizeOf(context);
     final logoWidth = screenSize.width * 0.5;
 
-    final theme = Theme.of(context);
+    const defaultTemp = '**℃';
+    final tempTextStyle = Theme.of(context).textTheme.labelLarge!;
 
     final placeholder = SizedBox.square(
       dimension: logoWidth,
@@ -56,18 +57,16 @@ class _WeatherTmp extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            '**℃',
+            defaultTemp,
             textAlign: TextAlign.center,
-            style: theme.textTheme.labelLarge!
-                .merge(const TextStyle(color: Colors.blue)),
+            style: tempTextStyle.merge(const TextStyle(color: Colors.blue)),
           ),
         ),
         Expanded(
           child: Text(
-            '**℃',
+            defaultTemp,
             textAlign: TextAlign.center,
-            style: theme.textTheme.labelLarge!
-                .merge(const TextStyle(color: Colors.red)),
+            style: tempTextStyle.merge(const TextStyle(color: Colors.red)),
           ),
         ),
       ],
