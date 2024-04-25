@@ -50,8 +50,19 @@ class _WeatherIcon extends State<WeatherIcon> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
     final logoWidth = screenSize.width * 0.5;
-    return SvgPicture.asset('assets/${widget.weather}.svg',
-        width: logoWidth, height: logoWidth);
+
+    if (widget.weather != '') {
+      return SizedBox.square(
+        dimension: logoWidth,
+        child: const Placeholder(),
+      );
+    }
+
+    return SvgPicture.asset(
+      'assets/${widget.weather}.svg',
+      width: logoWidth,
+      height: logoWidth,
+    );
   }
 }
 
