@@ -84,8 +84,7 @@ class _Buttons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
-    final logoWidth = screenSize.width * 0.5;
-    final textWidth = logoWidth * 0.5;
+    final textWidth = screenSize.width / 4;
 
     final buttonGroup = Row(
       children: [
