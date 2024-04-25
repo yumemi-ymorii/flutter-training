@@ -55,27 +55,21 @@ class _WeatherTmp extends StatelessWidget {
       children: [
         SizedBox(
           width: textWidth,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Align(
-              child: Text(
-                '**℃',
-                style: theme.textTheme.labelLarge!
-                    .merge(const TextStyle(color: Colors.blue)),
-              ),
+          child: Align(
+            child: Text(
+              '**℃',
+              style: theme.textTheme.labelLarge!
+                  .merge(const TextStyle(color: Colors.blue)),
             ),
           ),
         ),
         SizedBox(
           width: textWidth,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Align(
-              child: Text(
-                '**℃',
-                style: theme.textTheme.labelLarge!
-                    .merge(const TextStyle(color: Colors.red)),
-              ),
+          child: Align(
+            child: Text(
+              '**℃',
+              style: theme.textTheme.labelLarge!
+                  .merge(const TextStyle(color: Colors.red)),
             ),
           ),
         ),
@@ -84,7 +78,13 @@ class _WeatherTmp extends StatelessWidget {
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [placeholder, tempTextGroup],
+      children: [
+        placeholder,
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: tempTextGroup,
+        ),
+      ],
     );
   }
 }
