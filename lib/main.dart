@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,7 +20,7 @@ class MainApp extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 const Spacer(),
-                _WeatherTmp(),
+                _WeatherTemperaturerature(),
                 Flexible(
                   child: Column(
                     children: [
@@ -36,34 +38,34 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class _WeatherTmp extends StatelessWidget {
+class _WeatherTemperaturerature extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
     final logoWidth = screenSize.width * 0.5;
 
-    const defaultTemp = '**℃';
-    final tempTextStyle = Theme.of(context).textTheme.labelLarge!;
+    const defaultTemperature = '**℃';
+    final temperatureTextStyle = Theme.of(context).textTheme.labelLarge!;
 
     final placeholder = SizedBox.square(
       dimension: logoWidth,
       child: const Placeholder(),
     );
 
-    final tempTextGroup = Row(
+    final TemperatureTextGroup = Row(
       children: [
         Expanded(
           child: Text(
-            defaultTemp,
+            defaultTemperature,
             textAlign: TextAlign.center,
-            style: tempTextStyle.copyWith(color: Colors.blue),
+            style: temperatureTextStyle.copyWith(color: Colors.blue),
           ),
         ),
         Expanded(
           child: Text(
-            defaultTemp,
+            defaultTemperature,
             textAlign: TextAlign.center,
-            style: tempTextStyle.copyWith(color: Colors.red),
+            style: temperatureTextStyle.copyWith(color: Colors.red),
           ),
         ),
       ],
@@ -74,7 +76,7 @@ class _WeatherTmp extends StatelessWidget {
         placeholder,
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
-          child: tempTextGroup,
+          child: TemperatureTextGroup,
         ),
       ],
     );
