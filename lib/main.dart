@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:yumemi_weather/yumemi_weather.dart';
 
 void main() {
   runApp(const MainApp());
@@ -118,6 +119,7 @@ class _Buttons extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
     final textWidth = screenSize.width / 4;
+    final yumemiWeather = YumemiWeather();
 
     return Row(
       children: [
@@ -134,7 +136,10 @@ class _Buttons extends StatelessWidget {
           width: textWidth,
           child: Center(
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                final weatherCondition = yumemiWeather.fetchSimpleWeather();
+                print('Weather Condition: $weatherCondition'); // "sunny"
+              },
               child: const Text('Reload'),
             ),
           ),
