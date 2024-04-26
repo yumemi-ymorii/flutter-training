@@ -11,7 +11,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Scaffold(
         body: SizedBox.expand(
           child: FractionallySizedBox(
@@ -19,13 +19,15 @@ class MainApp extends StatelessWidget {
             alignment: FractionalOffset.center,
             child: Column(
               children: <Widget>[
-                Spacer(),
-                _WeatherTemperature(),
+                const Spacer(),
+                const _WeatherTemperature(),
                 Flexible(
                   child: Column(
                     children: [
-                      SizedBox(height: 80),
-                      _Buttons(),
+                      const SizedBox(height: 80),
+                      _Buttons(
+                        onReloaded: () {},
+                      ),
                     ],
                   ),
                 ),
@@ -114,12 +116,14 @@ class _WeatherTemperature extends StatelessWidget {
 }
 
 class _Buttons extends StatelessWidget {
-  const _Buttons();
+  const _Buttons({
+    required void Function() onReloaded,
+  }) : _onReloaded = onReloaded;
+  final VoidCallback _onReloaded;
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
     final textWidth = screenSize.width / 4;
-    final yumemiWeather = YumemiWeather();
 
     return Row(
       children: [
@@ -136,10 +140,7 @@ class _Buttons extends StatelessWidget {
           width: textWidth,
           child: Center(
             child: TextButton(
-              onPressed: () {
-                final weatherCondition = yumemiWeather.fetchSimpleWeather();
-                print('Weather Condition: $weatherCondition'); // "sunny"
-              },
+              onPressed: _onReloaded,
               child: const Text('Reload'),
             ),
           ),
