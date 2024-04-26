@@ -6,8 +6,22 @@ void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  String? _weatherCodition;
+
+  void _reloadWeatherCondition() {
+    final yumemiWeather = YumemiWeather();
+    setState(() {
+      _weatherCodition = yumemiWeather.fetchSimpleWeather();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +34,15 @@ class MainApp extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 const Spacer(),
-                const _WeatherTemperature(),
+                _WeatherTemperature(
+                  weatherCondition: _weatherCodition,
+                ),
                 Flexible(
                   child: Column(
                     children: [
                       const SizedBox(height: 80),
                       _Buttons(
-                        onReloaded: () {},
+                        onReloaded: _reloadWeatherCondition,
                       ),
                     ],
                   ),
@@ -40,47 +56,34 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class WeatherIcon extends StatefulWidget {
-  final String weather;
-  WeatherIcon({required this.weather});
+class _WeatherIcon extends StatelessWidget {
+  const _WeatherIcon({required String weatherCondition})
+      : _weatherCondition = weatherCondition;
+  final String _weatherCondition;
 
-  @override
-  _WeatherIcon createState() => _WeatherIcon();
-}
-
-class _WeatherIcon extends State<WeatherIcon> {
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.sizeOf(context);
-    final logoWidth = screenSize.width * 0.5;
-
-    if (widget.weather != '') {
-      return SizedBox.square(
-        dimension: logoWidth,
-        child: const Placeholder(),
-      );
-    }
-
     return SvgPicture.asset(
-      'assets/${widget.weather}.svg',
-      width: logoWidth,
-      height: logoWidth,
+      'assets/$_weatherCondition.svg',
     );
   }
 }
 
 class _WeatherTemperature extends StatelessWidget {
-  const _WeatherTemperature();
+  const _WeatherTemperature({
+    String? weatherCondition,
+  }) : _weatherCondition = weatherCondition;
+  final String? _weatherCondition;
 
   @override
   Widget build(BuildContext context) {
     const defaultTemperature = '**℃';
     final temperatureTextStyle = Theme.of(context).textTheme.labelLarge!;
 
-    const placeholder = AspectRatio(
-      aspectRatio: 1,
-      child: Placeholder(),
-    );
+    final weatherIcon = switch (_weatherCondition) {
+      null => const Placeholder(),
+      final String value => _WeatherIcon(weatherCondition: value),
+    };
 
     final temperatureTextGroup = Row(
       children: [
@@ -103,8 +106,9 @@ class _WeatherTemperature extends StatelessWidget {
 
     return Column(
       children: [
-        WeatherIcon(
-          weather: 'cloudy',
+        AspectRatio(
+          aspectRatio: 1,
+          child: weatherIcon,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
