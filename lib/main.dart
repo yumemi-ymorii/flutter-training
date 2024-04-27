@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_training/weather/weather_panel.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
 void main() {
@@ -34,7 +34,7 @@ class _MainAppState extends State<MainApp> {
             child: Column(
               children: <Widget>[
                 const Spacer(),
-                _WeatherTemperature(
+                WeatherPanel(
                   weatherCondition: _weatherCodition,
                 ),
                 Flexible(
@@ -52,69 +52,6 @@ class _MainAppState extends State<MainApp> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _WeatherIcon extends StatelessWidget {
-  const _WeatherIcon({required String weatherCondition})
-      : _weatherCondition = weatherCondition;
-  final String _weatherCondition;
-
-  @override
-  Widget build(BuildContext context) {
-    return SvgPicture.asset(
-      'assets/$_weatherCondition.svg',
-    );
-  }
-}
-
-class _WeatherTemperature extends StatelessWidget {
-  const _WeatherTemperature({
-    String? weatherCondition,
-  }) : _weatherCondition = weatherCondition;
-  final String? _weatherCondition;
-
-  @override
-  Widget build(BuildContext context) {
-    const defaultTemperature = '**℃';
-    final temperatureTextStyle = Theme.of(context).textTheme.labelLarge!;
-
-    final weatherIcon = switch (_weatherCondition) {
-      null => const Placeholder(),
-      final String value => _WeatherIcon(weatherCondition: value),
-    };
-
-    final temperatureTextGroup = Row(
-      children: [
-        Expanded(
-          child: Text(
-            defaultTemperature,
-            textAlign: TextAlign.center,
-            style: temperatureTextStyle.copyWith(color: Colors.blue),
-          ),
-        ),
-        Expanded(
-          child: Text(
-            defaultTemperature,
-            textAlign: TextAlign.center,
-            style: temperatureTextStyle.copyWith(color: Colors.red),
-          ),
-        ),
-      ],
-    );
-
-    return Column(
-      children: [
-        AspectRatio(
-          aspectRatio: 1,
-          child: weatherIcon,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: temperatureTextGroup,
-        ),
-      ],
     );
   }
 }
