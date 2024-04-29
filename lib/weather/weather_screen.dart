@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_training/green_panel.dart';
 import 'package:flutter_training/weather/weather_panel.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
@@ -67,7 +68,27 @@ class _Buttons extends StatelessWidget {
           child: Center(
             child: TextButton(
               // 後で関数にしたい
-              onPressed: () {},
+              onPressed: () async {
+                await Navigator.of(context).push<void>(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      return const GreenPanel();
+                    },
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(-1, 0);
+                      const end = Offset.zero;
+                      final tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: Curves.easeInOut));
+                      final offsetAnimation = animation.drive(tween);
+                      return SlideTransition(
+                        position: offsetAnimation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
               child: const Text('Close'),
             ),
           ),
