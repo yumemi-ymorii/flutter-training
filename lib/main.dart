@@ -15,11 +15,11 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   String? _weatherCodition;
+  final _yumemiWeather = YumemiWeather();
 
   void _reloadWeatherCondition() {
-    final yumemiWeather = YumemiWeather();
     setState(() {
-      _weatherCodition = yumemiWeather.fetchSimpleWeather();
+      _weatherCodition = _yumemiWeather.fetchSimpleWeather();
     });
   }
 
