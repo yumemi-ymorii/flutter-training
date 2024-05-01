@@ -1,5 +1,5 @@
 enum Screen {
-  launch(route: '/launch'),
+  loading(route: '/loading'),
   weatherScreen(route: '/weather_screen');
 
   const Screen({

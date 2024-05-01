@@ -13,11 +13,11 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const LoadingView(),
       routes: {
-        Screen.launch.route: (context) => const LoadingView(),
+        Screen.loading.route: (context) => const LoadingView(),
         Screen.weatherScreen.route: (context) => const WeatherScreen(),
       },
+      initialRoute: Screen.loading.route,
     );
   }
 }
