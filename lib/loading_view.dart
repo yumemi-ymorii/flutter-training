@@ -18,7 +18,7 @@ class _LoadingViewState extends State<LoadingView> {
 
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
-    if (!context.mounted) {
+    if (!mounted) {
       return;
     }
 
