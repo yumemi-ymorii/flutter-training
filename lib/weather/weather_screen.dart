@@ -20,6 +20,27 @@ class _WeatherScreen extends State<WeatherScreen> {
     });
   }
 
+  Future<void> _closeWeatherScreen() async {
+    await Navigator.of(context).push<void>(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return const GreenPanel();
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(-1, 0);
+          const end = Offset.zero;
+          final tween = Tween(begin: begin, end: end)
+              .chain(CurveTween(curve: Curves.easeInOut));
+          final offsetAnimation = animation.drive(tween);
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +59,7 @@ class _WeatherScreen extends State<WeatherScreen> {
                   children: [
                     const SizedBox(height: 80),
                     _Buttons(
+                      onClose: _closeWeatherScreen,
                       onReloaded: _reloadWeatherCondition,
                     ),
                   ],
@@ -54,8 +76,11 @@ class _WeatherScreen extends State<WeatherScreen> {
 class _Buttons extends StatelessWidget {
   const _Buttons({
     required void Function() onReloaded,
-  }) : _onReloaded = onReloaded;
+    required void Function() onClose,
+  })  : _onReloaded = onReloaded,
+        _onClose = onClose;
   final VoidCallback _onReloaded;
+  final VoidCallback _onClose;
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
@@ -68,27 +93,7 @@ class _Buttons extends StatelessWidget {
           child: Center(
             child: TextButton(
               // 後で関数にしたい
-              onPressed: () async {
-                await Navigator.of(context).push<void>(
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) {
-                      return const GreenPanel();
-                    },
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      const begin = Offset(-1, 0);
-                      const end = Offset.zero;
-                      final tween = Tween(begin: begin, end: end)
-                          .chain(CurveTween(curve: Curves.easeInOut));
-                      final offsetAnimation = animation.drive(tween);
-                      return SlideTransition(
-                        position: offsetAnimation,
-                        child: child,
-                      );
-                    },
-                  ),
-                );
-              },
+              onPressed: _onClose,
               child: const Text('Close'),
             ),
           ),
