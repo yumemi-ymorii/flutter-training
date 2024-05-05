@@ -19,6 +19,10 @@ class _WeatherScreen extends State<WeatherScreen> {
     });
   }
 
+  void _closeWeatherScreen() {
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +41,8 @@ class _WeatherScreen extends State<WeatherScreen> {
                   children: [
                     const SizedBox(height: 80),
                     _Buttons(
-                      onReloaded: _reloadWeatherCondition,
+                      onClose: _closeWeatherScreen,
+                      onReload: _reloadWeatherCondition,
                     ),
                   ],
                 ),
@@ -52,9 +57,12 @@ class _WeatherScreen extends State<WeatherScreen> {
 
 class _Buttons extends StatelessWidget {
   const _Buttons({
-    required void Function() onReloaded,
-  }) : _onReloaded = onReloaded;
-  final VoidCallback _onReloaded;
+    required void Function() onReload,
+    required void Function() onClose,
+  })  : _onReload = onReload,
+        _onClose = onClose;
+  final VoidCallback _onReload;
+  final VoidCallback _onClose;
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
@@ -66,8 +74,7 @@ class _Buttons extends StatelessWidget {
           width: textWidth,
           child: Center(
             child: TextButton(
-              // 後で関数にしたい
-              onPressed: () {},
+              onPressed: _onClose,
               child: const Text('Close'),
             ),
           ),
@@ -76,7 +83,7 @@ class _Buttons extends StatelessWidget {
           width: textWidth,
           child: Center(
             child: TextButton(
-              onPressed: _onReloaded,
+              onPressed: _onReload,
               child: const Text('Reload'),
             ),
           ),
