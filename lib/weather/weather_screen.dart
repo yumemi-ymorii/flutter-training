@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_training/weather/weather_alert_dialog.dart';
 import 'package:flutter_training/weather/weather_panel.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
@@ -31,16 +32,7 @@ class _WeatherScreen extends State<WeatherScreen> {
       unawaited(
         showDialog<String>(
           context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Reloading Weather Info Error'),
-            content: Text(errorMessage),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
-              ),
-            ],
-          ),
+          builder: (context) => WeatherAlertDialog(errorMessage: errorMessage),
         ),
       );
     }
