@@ -18,8 +18,21 @@ class _WeatherScreen extends State<WeatherScreen> {
   void _reloadWeatherCondition() {
     const location = 'tokyoß';
     final yumemiWeather = YumemiWeather();
+    const expectedWeathers = <String>['sunny', 'cloudy', 'rainy'];
     try {
       final weatherCodition = yumemiWeather.fetchThrowsWeather(location);
+      if (!expectedWeathers.contains(weatherCodition)) {
+        const errorMessage = '予期しない天気が取得されました。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
+        unawaited(
+          showDialog<String>(
+            context: context,
+            builder: (context) =>
+                const WeatherAlertDialog(errorMessage: errorMessage),
+          ),
+        );
+      }
+
       setState(() {
         _weatherCodition = weatherCodition;
       });
