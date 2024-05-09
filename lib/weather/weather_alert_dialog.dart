@@ -12,7 +12,7 @@ class WeatherAlertDialog extends StatelessWidget {
       content: Text(_errorMessage),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
+          onPressed: () => Navigator.pop(context),
           child: const Text('OK'),
         ),
       ],
