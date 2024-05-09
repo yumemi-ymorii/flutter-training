@@ -24,13 +24,7 @@ class _WeatherScreen extends State<WeatherScreen> {
       if (!expectedWeathers.contains(weatherCodition)) {
         const errorMessage = '予期しない天気が取得されました。'
             '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
-        unawaited(
-          showDialog<String>(
-            context: context,
-            builder: (context) =>
-                const WeatherAlertDialog(errorMessage: errorMessage),
-          ),
-        );
+        showWeatherAlertDialog(errorMessage);
       }
 
       setState(() {
@@ -42,17 +36,24 @@ class _WeatherScreen extends State<WeatherScreen> {
         YumemiWeatherError.unknown => '予期せぬエラーが発生しております。'
             '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。',
       };
-      unawaited(
-        showDialog<String>(
-          context: context,
-          builder: (context) => WeatherAlertDialog(errorMessage: errorMessage),
-        ),
-      );
+      showWeatherAlertDialog(errorMessage);
     }
   }
 
   void _closeWeatherScreen() {
     Navigator.pop(context);
+  }
+
+  void showWeatherAlertDialog(String errorMessage) {
+    if (!mounted) {
+      return;
+    }
+    unawaited(
+      showDialog<String>(
+        context: context,
+        builder: (context) => WeatherAlertDialog(errorMessage: errorMessage),
+      ),
+    );
   }
 
   @override
