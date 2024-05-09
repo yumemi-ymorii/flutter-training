@@ -1,9 +1,16 @@
 import 'dart:async';
+import 'package:collection/collection.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_training/weather/weather_alert_dialog.dart';
 import 'package:flutter_training/weather/weather_panel.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
+
+enum WeatherCondition {
+  sunny,
+  cloudy,
+  rainy,
+}
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
@@ -18,17 +25,19 @@ class _WeatherScreen extends State<WeatherScreen> {
   void _reloadWeatherCondition() {
     const location = 'tokyoß';
     final yumemiWeather = YumemiWeather();
-    const expectedWeathers = <String>['sunny', 'cloudy', 'rainy'];
     try {
-      final weatherCodition = yumemiWeather.fetchThrowsWeather(location);
-      if (!expectedWeathers.contains(weatherCodition)) {
+      final weatherCoditionText = yumemiWeather.fetchThrowsWeather(location);
+      final weatherCondition = WeatherCondition.values.firstWhereOrNull(
+        (w) => w.name == weatherCoditionText,
+      );
+
+      if (weatherCondition == null) {
         const errorMessage = '予期しない天気が取得されました。'
             '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
         showWeatherAlertDialog(errorMessage);
       }
-
       setState(() {
-        _weatherCodition = weatherCodition;
+        _weatherCodition = weatherCondition?.name;
       });
     } on YumemiWeatherError catch (e) {
       final errorMessage = switch (e) {
