@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:collection/collection.dart';
 
 import 'package:flutter/material.dart';
@@ -16,14 +17,25 @@ class WeatherScreen extends StatefulWidget {
 
 class _WeatherScreen extends State<WeatherScreen> {
   WeatherCondition? _weatherCodition;
+  String? _weatherMaxTemperature;
+  String? _weatherMinTemperature;
 
   void _reloadWeatherCondition() {
-    const location = 'tokyoß';
+    const location = '''
+    {
+      "area": "tokyo",
+      "date": "2020-04-01T12:00:00+09:00"
+      }''';
     final yumemiWeather = YumemiWeather();
     try {
-      final weatherCoditionText = yumemiWeather.fetchThrowsWeather(location);
+      final weatherText = yumemiWeather.fetchWeather(location);
+      final weatherMap = jsonDecode(weatherText) as Map<String, dynamic>?;
+      final weatherConditionText = weatherMap?['weather_condition'];
+      final weatherMaxTemperature = weatherMap?['max_temperature'].toString();
+      final weatherMinTemperature = weatherMap?['min_temperature'].toString();
+
       final weatherCondition = WeatherCondition.values.firstWhereOrNull(
-        (w) => w.name == weatherCoditionText,
+        (w) => w.name == weatherConditionText,
       );
 
       if (weatherCondition == null) {
@@ -33,6 +45,8 @@ class _WeatherScreen extends State<WeatherScreen> {
       }
       setState(() {
         _weatherCodition = weatherCondition;
+        _weatherMaxTemperature = weatherMaxTemperature;
+        _weatherMinTemperature = weatherMinTemperature;
       });
     } on YumemiWeatherError catch (e) {
       final errorMessage = switch (e) {
@@ -72,6 +86,8 @@ class _WeatherScreen extends State<WeatherScreen> {
               const Spacer(),
               WeatherPanel(
                 weatherCondition: _weatherCodition,
+                weatherMaxTemperature: _weatherMaxTemperature,
+                weatherMinTemperature: _weatherMinTemperature,
               ),
               Flexible(
                 child: Column(
