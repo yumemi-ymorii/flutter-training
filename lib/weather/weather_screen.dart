@@ -1,4 +1,9 @@
+import 'dart:async';
+import 'package:collection/collection.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_training/weather/weather_alert_dialog.dart';
+import 'package:flutter_training/weather/weather_condition.dart';
 import 'package:flutter_training/weather/weather_panel.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
@@ -10,17 +15,49 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreen extends State<WeatherScreen> {
-  String? _weatherCodition;
+  WeatherCondition? _weatherCodition;
 
   void _reloadWeatherCondition() {
+    const location = 'tokyoß';
     final yumemiWeather = YumemiWeather();
-    setState(() {
-      _weatherCodition = yumemiWeather.fetchSimpleWeather();
-    });
+    try {
+      final weatherCoditionText = yumemiWeather.fetchThrowsWeather(location);
+      final weatherCondition = WeatherCondition.values.firstWhereOrNull(
+        (w) => w.name == weatherCoditionText,
+      );
+
+      if (weatherCondition == null) {
+        const errorMessage = '予期しない天気が取得されました。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
+        _showWeatherAlertDialog(errorMessage);
+      }
+      setState(() {
+        _weatherCodition = weatherCondition;
+      });
+    } on YumemiWeatherError catch (e) {
+      final errorMessage = switch (e) {
+        YumemiWeatherError.invalidParameter => '「$location」は無効な地域名です',
+        YumemiWeatherError.unknown => '予期せぬエラーが発生しております。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。',
+      };
+      _showWeatherAlertDialog(errorMessage);
+    }
   }
 
   void _closeWeatherScreen() {
     Navigator.pop(context);
+  }
+
+  void _showWeatherAlertDialog(String errorMessage) {
+    if (!mounted) {
+      return;
+    }
+    unawaited(
+      showDialog<String>(
+        context: context,
+        builder: (context) => WeatherAlertDialog(errorMessage: errorMessage),
+      ),
+    );
   }
 
   @override

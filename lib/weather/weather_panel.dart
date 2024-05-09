@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_training/weather/weather_condition.dart';
 import 'package:flutter_training/weather/weather_icon.dart';
 
 class WeatherPanel extends StatelessWidget {
   const WeatherPanel({
     super.key,
-    String? weatherCondition,
+    WeatherCondition? weatherCondition,
   }) : _weatherCondition = weatherCondition;
-  final String? _weatherCondition;
+  final WeatherCondition? _weatherCondition;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class WeatherPanel extends StatelessWidget {
 
     final weatherIcon = switch (_weatherCondition) {
       null => const Placeholder(),
-      final String value => WeatherIcon(weatherCondition: value),
+      final WeatherCondition value => WeatherIcon(weatherCondition: value),
     };
 
     final temperatureTextGroup = Row(
