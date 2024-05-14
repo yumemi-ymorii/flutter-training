@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_training/weather/location.dart';
 import 'package:flutter_training/weather/weather_alert_dialog.dart';
 import 'package:flutter_training/weather/weather_condition.dart';
 import 'package:flutter_training/weather/weather_panel.dart';
@@ -22,13 +23,15 @@ class _WeatherScreen extends State<WeatherScreen> {
   final _yumemiWeather = YumemiWeather();
 
   void _reloadWeatherCondition() {
-    const location = '''
-{
-  "area": "tokyo",
-  "date": "2020-04-01T12:00:00+09:00"
-}''';
+    final location = Location(
+      area: 'tokyo',
+      date: DateTime.parse('2020-04-01T12:00:00+09:00'),
+    );
+
+    final locationJson = location.toJson();
+    final locationJsonString = jsonEncode(locationJson);
     try {
-      final weatherText = _yumemiWeather.fetchWeather(location);
+      final weatherText = _yumemiWeather.fetchWeather(locationJsonString);
       final weather = switch (jsonDecode(weatherText)) {
         {
           'weather_condition': final String weatherCondition,
