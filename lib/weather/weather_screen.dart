@@ -22,10 +22,10 @@ class _WeatherScreen extends State<WeatherScreen> {
 
   void _reloadWeatherCondition() {
     const location = '''
-    {
-      "area": "tokyo",
-      "date": "2020-04-01T12:00:00+09:00"
-      }''';
+{
+  "area": "tokyo",
+  "date": "2020-04-01T12:00:00+09:00"
+}''';
     final yumemiWeather = YumemiWeather();
     try {
       final weatherText = yumemiWeather.fetchWeather(location);
