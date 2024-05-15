@@ -17,8 +17,8 @@ class WeatherScreen extends StatefulWidget {
 
 class _WeatherScreen extends State<WeatherScreen> {
   WeatherCondition? _weatherCodition;
-  String? _weatherMaxTemperature;
-  String? _weatherMinTemperature;
+  int? _weatherMaxTemperature;
+  int? _weatherMinTemperature;
 
   void _reloadWeatherCondition() {
     const location = '''
@@ -29,24 +29,39 @@ class _WeatherScreen extends State<WeatherScreen> {
     final yumemiWeather = YumemiWeather();
     try {
       final weatherText = yumemiWeather.fetchWeather(location);
-      final weatherMap = jsonDecode(weatherText) as Map<String, dynamic>?;
-      final weatherConditionText = weatherMap?['weather_condition'];
-      final weatherMaxTemperature = weatherMap?['max_temperature'].toString();
-      final weatherMinTemperature = weatherMap?['min_temperature'].toString();
+      final weather = switch (jsonDecode(weatherText)) {
+        {
+          'weather_condition': final String weatherCondition,
+          'max_temperature': final int maxTemperature,
+          'min_temperature': final int minTemperature,
+        } =>
+          () {
+            final condition = WeatherCondition.values.firstWhereOrNull(
+              (w) => w.name == weatherCondition,
+            );
+            if (condition == null) {
+              return null;
+            }
+            return (
+              condition: condition,
+              maxTemperature: maxTemperature,
+              minTemperature: minTemperature,
+            );
+          }(),
+        _ => null,
+      };
 
-      final weatherCondition = WeatherCondition.values.firstWhereOrNull(
-        (w) => w.name == weatherConditionText,
-      );
-
-      if (weatherCondition == null) {
+      if (weather == null) {
         const errorMessage = '予期しない天気が取得されました。'
             '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
         _showWeatherAlertDialog(errorMessage);
+        return;
       }
+
       setState(() {
-        _weatherCodition = weatherCondition;
-        _weatherMaxTemperature = weatherMaxTemperature;
-        _weatherMinTemperature = weatherMinTemperature;
+        _weatherCodition = weather.condition;
+        _weatherMaxTemperature = weather.maxTemperature;
+        _weatherMinTemperature = weather.minTemperature;
       });
     } on YumemiWeatherError catch (e) {
       final errorMessage = switch (e) {

@@ -6,15 +6,15 @@ class WeatherPanel extends StatelessWidget {
   const WeatherPanel({
     super.key,
     WeatherCondition? weatherCondition,
-    String? weatherMaxTemperature,
-    String? weatherMinTemperature,
+    int? weatherMaxTemperature,
+    int? weatherMinTemperature,
   })  : _weatherCondition = weatherCondition,
         _weatherMaxTemperature = weatherMaxTemperature,
         _weatherMinTemperature = weatherMinTemperature;
 
   final WeatherCondition? _weatherCondition;
-  final String? _weatherMaxTemperature;
-  final String? _weatherMinTemperature;
+  final int? _weatherMaxTemperature;
+  final int? _weatherMinTemperature;
 
   @override
   Widget build(BuildContext context) {
