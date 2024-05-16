@@ -6,12 +6,21 @@ class WeatherPanel extends StatelessWidget {
   const WeatherPanel({
     super.key,
     WeatherCondition? weatherCondition,
-  }) : _weatherCondition = weatherCondition;
+    int? weatherMaxTemperature,
+    int? weatherMinTemperature,
+  })  : _weatherCondition = weatherCondition,
+        _weatherMaxTemperature = weatherMaxTemperature,
+        _weatherMinTemperature = weatherMinTemperature;
+
   final WeatherCondition? _weatherCondition;
+  final int? _weatherMaxTemperature;
+  final int? _weatherMinTemperature;
 
   @override
   Widget build(BuildContext context) {
     const defaultTemperature = '**℃';
+    final weatherMaxTemperature = _weatherMaxTemperature;
+    final weatherMinTemperature = _weatherMinTemperature;
     final temperatureTextStyle = Theme.of(context).textTheme.labelLarge!;
 
     final weatherIcon = switch (_weatherCondition) {
@@ -23,14 +32,18 @@ class WeatherPanel extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            defaultTemperature,
+            weatherMinTemperature == null
+                ? defaultTemperature
+                : '$weatherMinTemperature℃',
             textAlign: TextAlign.center,
             style: temperatureTextStyle.copyWith(color: Colors.blue),
           ),
         ),
         Expanded(
           child: Text(
-            defaultTemperature,
+            weatherMaxTemperature == null
+                ? defaultTemperature
+                : '$weatherMaxTemperature℃',
             textAlign: TextAlign.center,
             style: temperatureTextStyle.copyWith(color: Colors.red),
           ),

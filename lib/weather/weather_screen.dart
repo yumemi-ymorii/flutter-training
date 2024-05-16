@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:collection/collection.dart';
 
 import 'package:flutter/material.dart';
@@ -16,23 +17,51 @@ class WeatherScreen extends StatefulWidget {
 
 class _WeatherScreen extends State<WeatherScreen> {
   WeatherCondition? _weatherCodition;
+  int? _weatherMaxTemperature;
+  int? _weatherMinTemperature;
+  final _yumemiWeather = YumemiWeather();
 
   void _reloadWeatherCondition() {
-    const location = 'tokyoß';
-    final yumemiWeather = YumemiWeather();
+    const location = '''
+{
+  "area": "tokyo",
+  "date": "2020-04-01T12:00:00+09:00"
+}''';
     try {
-      final weatherCoditionText = yumemiWeather.fetchThrowsWeather(location);
-      final weatherCondition = WeatherCondition.values.firstWhereOrNull(
-        (w) => w.name == weatherCoditionText,
-      );
+      final weatherText = _yumemiWeather.fetchWeather(location);
+      final weather = switch (jsonDecode(weatherText)) {
+        {
+          'weather_condition': final String weatherCondition,
+          'max_temperature': final int maxTemperature,
+          'min_temperature': final int minTemperature,
+        } =>
+          () {
+            final condition = WeatherCondition.values.firstWhereOrNull(
+              (w) => w.name == weatherCondition,
+            );
+            if (condition == null) {
+              return null;
+            }
+            return (
+              condition: condition,
+              maxTemperature: maxTemperature,
+              minTemperature: minTemperature,
+            );
+          }(),
+        _ => null,
+      };
 
-      if (weatherCondition == null) {
+      if (weather == null) {
         const errorMessage = '予期しない天気が取得されました。'
             '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
         _showWeatherAlertDialog(errorMessage);
+        return;
       }
+
       setState(() {
-        _weatherCodition = weatherCondition;
+        _weatherCodition = weather.condition;
+        _weatherMaxTemperature = weather.maxTemperature;
+        _weatherMinTemperature = weather.minTemperature;
       });
     } on YumemiWeatherError catch (e) {
       final errorMessage = switch (e) {
@@ -72,6 +101,8 @@ class _WeatherScreen extends State<WeatherScreen> {
               const Spacer(),
               WeatherPanel(
                 weatherCondition: _weatherCodition,
+                weatherMaxTemperature: _weatherMaxTemperature,
+                weatherMinTemperature: _weatherMinTemperature,
               ),
               Flexible(
                 child: Column(
