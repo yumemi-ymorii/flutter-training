@@ -16,9 +16,9 @@ Weather _$WeatherFromJson(Map<String, dynamic> json) => $checkedCreate(
           condition: $checkedConvert('weather_condition',
               (v) => $enumDecode(_$WeatherConditionEnumMap, v)),
           maxTemperature:
-              $checkedConvert('max_temperature', (v) => v as String),
+              $checkedConvert('max_temperature', (v) => (v as num).toInt()),
           minTemperature:
-              $checkedConvert('min_temperature', (v) => v as String),
+              $checkedConvert('min_temperature', (v) => (v as num).toInt()),
         );
         return val;
       },

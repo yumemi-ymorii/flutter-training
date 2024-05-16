@@ -16,8 +16,8 @@ class Weather {
 
   @JsonKey(name: 'weather_condition')
   final WeatherCondition condition;
-  final String maxTemperature;
-  final String minTemperature;
+  final int maxTemperature;
+  final int minTemperature;
 
   Map<String, dynamic> toJson() => _$WeatherToJson(this);
 }
