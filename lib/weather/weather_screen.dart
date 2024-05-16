@@ -19,6 +19,7 @@ class _WeatherScreen extends State<WeatherScreen> {
   WeatherCondition? _weatherCodition;
   int? _weatherMaxTemperature;
   int? _weatherMinTemperature;
+  final _yumemiWeather = YumemiWeather();
 
   void _reloadWeatherCondition() {
     const location = '''
@@ -26,9 +27,8 @@ class _WeatherScreen extends State<WeatherScreen> {
   "area": "tokyo",
   "date": "2020-04-01T12:00:00+09:00"
 }''';
-    final yumemiWeather = YumemiWeather();
     try {
-      final weatherText = yumemiWeather.fetchWeather(location);
+      final weatherText = _yumemiWeather.fetchWeather(location);
       final weather = switch (jsonDecode(weatherText)) {
         {
           'weather_condition': final String weatherCondition,
