@@ -2,22 +2,34 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_training/weather/location.dart';
 import 'package:flutter_training/weather/weather.dart';
 import 'package:flutter_training/weather/weather_alert_dialog.dart';
 import 'package:flutter_training/weather/weather_condition.dart';
 import 'package:flutter_training/weather/weather_panel.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
-class WeatherScreen extends StatefulWidget {
+part 'weather_screen.g.dart';
+
+@riverpod
+class WeatherNotifier extends _$WeatherNotifier {
+  @override
+  Weather? build() {
+    return null;
+  }
+}
+
+class WeatherScreen extends ConsumerStatefulWidget {
   const WeatherScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() => _WeatherScreen();
+  ConsumerState<WeatherScreen> createState() => _WeatherScreen();
 }
 
-class _WeatherScreen extends State<WeatherScreen> {
+class _WeatherScreen extends ConsumerState<WeatherScreen> {
   WeatherCondition? _weatherCodition;
   int? _weatherMaxTemperature;
   int? _weatherMinTemperature;
