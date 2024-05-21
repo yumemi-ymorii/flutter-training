@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_training/weather/location.dart';
 import 'package:flutter_training/weather/weather.dart';
 import 'package:flutter_training/weather/weather_alert_dialog.dart';
-import 'package:flutter_training/weather/weather_condition.dart';
 import 'package:flutter_training/weather/weather_panel.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -20,6 +19,10 @@ class WeatherNotifier extends _$WeatherNotifier {
   Weather? build() {
     return null;
   }
+
+  void update(Weather weather) {
+    state = weather;
+  }
 }
 
 class WeatherScreen extends ConsumerStatefulWidget {
@@ -30,9 +33,6 @@ class WeatherScreen extends ConsumerStatefulWidget {
 }
 
 class _WeatherScreen extends ConsumerState<WeatherScreen> {
-  WeatherCondition? _weatherCodition;
-  int? _weatherMaxTemperature;
-  int? _weatherMinTemperature;
   final _yumemiWeather = YumemiWeather();
 
   void _reloadWeatherCondition() {
@@ -57,11 +57,7 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
         return;
       }
 
-      setState(() {
-        _weatherCodition = weather.condition;
-        _weatherMaxTemperature = weather.maxTemperature;
-        _weatherMinTemperature = weather.minTemperature;
-      });
+      ref.read(weatherNotifierProvider.notifier).update(weather);
     } on YumemiWeatherError catch (e) {
       final errorMessage = switch (e) {
         YumemiWeatherError.invalidParameter => '「$location」は無効な地域名です',
@@ -94,6 +90,7 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final weather = ref.watch(weatherNotifierProvider);
     return Scaffold(
       body: SizedBox.expand(
         child: FractionallySizedBox(
@@ -103,9 +100,9 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
             children: <Widget>[
               const Spacer(),
               WeatherPanel(
-                weatherCondition: _weatherCodition,
-                weatherMaxTemperature: _weatherMaxTemperature,
-                weatherMinTemperature: _weatherMinTemperature,
+                weatherCondition: weather?.condition,
+                weatherMaxTemperature: weather?.maxTemperature,
+                weatherMinTemperature: weather?.minTemperature,
               ),
               Flexible(
                 child: Column(
