@@ -100,9 +100,7 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
             children: <Widget>[
               const Spacer(),
               WeatherPanel(
-                weatherCondition: weather?.condition,
-                weatherMaxTemperature: weather?.maxTemperature,
-                weatherMinTemperature: weather?.minTemperature,
+                weather: weather,
               ),
               Flexible(
                 child: Column(
