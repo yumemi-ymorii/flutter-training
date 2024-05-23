@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_training/weather/weather_condition.dart';
 import 'package:flutter_training/weather/weather_icon.dart';
-import 'package:flutter_training/weather/weather_screen.dart';
+import 'package:flutter_training/weather/weather_notifier.dart';
 
 class WeatherPanel extends ConsumerWidget {
   const WeatherPanel({
