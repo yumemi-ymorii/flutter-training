@@ -90,7 +90,6 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final weather = ref.watch(weatherNotifierProvider);
     return Scaffold(
       body: SizedBox.expand(
         child: FractionallySizedBox(
@@ -99,9 +98,7 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
           child: Column(
             children: <Widget>[
               const Spacer(),
-              WeatherPanel(
-                weather: weather,
-              ),
+              const WeatherPanel(),
               Flexible(
                 child: Column(
                   children: [

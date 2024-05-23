@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_training/weather/weather.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_training/weather/weather_condition.dart';
 import 'package:flutter_training/weather/weather_icon.dart';
+import 'package:flutter_training/weather/weather_screen.dart';
 
-class WeatherPanel extends StatelessWidget {
+class WeatherPanel extends ConsumerWidget {
   const WeatherPanel({
     super.key,
-    Weather? weather,
-  }) : _weather = weather;
-
-  final Weather? _weather;
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final weather = ref.watch(weatherNotifierProvider);
     const defaultTemperature = '**℃';
-    final weatherMaxTemperature = _weather?.maxTemperature;
-    final weatherMinTemperature = _weather?.minTemperature;
+    final weatherMaxTemperature = weather?.maxTemperature;
+    final weatherMinTemperature = weather?.minTemperature;
     final temperatureTextStyle = Theme.of(context).textTheme.labelLarge!;
 
-    final weatherIcon = switch (_weather?.condition) {
+    final weatherIcon = switch (weather?.condition) {
       null => const Placeholder(),
       final WeatherCondition value => WeatherIcon(weatherCondition: value),
     };
