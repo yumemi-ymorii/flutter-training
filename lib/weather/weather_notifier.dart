@@ -16,10 +16,6 @@ class WeatherNotifier extends _$WeatherNotifier {
     return null;
   }
 
-  void update(Weather weather) {
-    state = weather;
-  }
-
   void fetchWeather(Location location) {
     final weather = _weatherRepositry.fetchWeather(location);
     state = weather;

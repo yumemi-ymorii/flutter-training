@@ -1,14 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_training/weather/location.dart';
-import 'package:flutter_training/weather/weather.dart';
 import 'package:flutter_training/weather/weather_alert_dialog.dart';
 import 'package:flutter_training/weather/weather_notifier.dart';
 import 'package:flutter_training/weather/weather_panel.dart';
-import 'package:flutter_training/weather/weather_repository.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
@@ -20,9 +16,6 @@ class WeatherScreen extends ConsumerStatefulWidget {
 }
 
 class _WeatherScreen extends ConsumerState<WeatherScreen> {
-  final _yumemiWeather = YumemiWeather();
-  late final _weatherRepositry = WeatherRepository(weatherApi: _yumemiWeather);
-
   void _reloadWeatherCondition() {
     final location = Location(
       area: 'tokyo',
@@ -30,8 +23,7 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
     );
 
     try {
-      final weather = _weatherRepositry.fetchWeather(location);
-      ref.read(weatherNotifierProvider.notifier).update(weather);
+      ref.read(weatherNotifierProvider.notifier).fetchWeather(location);
     } on YumemiWeatherError catch (e) {
       final errorMessage = switch (e) {
         YumemiWeatherError.invalidParameter => '「$location」は無効な地域名です',
