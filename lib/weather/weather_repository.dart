@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_training/weather/data/weather_exception.dart';
 import 'package:flutter_training/weather/location.dart';
 import 'package:flutter_training/weather/weather.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
@@ -13,10 +14,19 @@ class WeatherRepository {
     final locationJson = location.toJson();
     final locationJsonString = jsonEncode(locationJson);
 
-    final weatherText = _weatherApi.fetchWeather(locationJsonString);
-    return switch (jsonDecode(weatherText)) {
-      final Map<String, dynamic> weatherMap => Weather.fromJson(weatherMap),
-      _ => throw Exception(),
-    };
+    try {
+      final weatherText = _weatherApi.fetchWeather(locationJsonString);
+      return switch (jsonDecode(weatherText)) {
+        final Map<String, dynamic> weatherMap => Weather.fromJson(weatherMap),
+        _ => throw Exception(),
+      };
+    } on YumemiWeatherError catch (e) {
+      final weatherException = switch (e) {
+        YumemiWeatherError.invalidParameter => InvalidParameterException(),
+        YumemiWeatherError.unknown => UnkownException(),
+      };
+
+      throw weatherException;
+    }
   }
 }

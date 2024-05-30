@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_training/weather/data/weather_exception.dart';
 import 'package:flutter_training/weather/location.dart';
 import 'package:flutter_training/weather/weather_alert_dialog.dart';
 import 'package:flutter_training/weather/weather_notifier.dart';
 import 'package:flutter_training/weather/weather_panel.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:yumemi_weather/yumemi_weather.dart';
 
 class WeatherScreen extends ConsumerStatefulWidget {
   const WeatherScreen({super.key});
@@ -24,10 +24,10 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
 
     try {
       ref.read(weatherNotifierProvider.notifier).fetchWeather(location);
-    } on YumemiWeatherError catch (e) {
+    } on WeatherException catch (e) {
       final errorMessage = switch (e) {
-        YumemiWeatherError.invalidParameter => '「$location」は無効な地域名です',
-        YumemiWeatherError.unknown => '予期せぬエラーが発生しております。'
+        InvalidParameterException() => '「$location」は無効な地域名です',
+        UnkownException() => '予期せぬエラーが発生しております。'
             '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。',
       };
       _showWeatherAlertDialog(errorMessage);
