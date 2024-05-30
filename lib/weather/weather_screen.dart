@@ -8,6 +8,7 @@ import 'package:flutter_training/weather/weather.dart';
 import 'package:flutter_training/weather/weather_alert_dialog.dart';
 import 'package:flutter_training/weather/weather_notifier.dart';
 import 'package:flutter_training/weather/weather_panel.dart';
+import 'package:flutter_training/weather/weather_repository.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
@@ -20,6 +21,7 @@ class WeatherScreen extends ConsumerStatefulWidget {
 
 class _WeatherScreen extends ConsumerState<WeatherScreen> {
   final _yumemiWeather = YumemiWeather();
+  late final _weatherRepositry = WeatherRepository(weatherApi: _yumemiWeather);
 
   void _reloadWeatherCondition() {
     final location = Location(
@@ -27,22 +29,8 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
       date: DateTime.parse('2020-04-01T12:00:00+09:00'),
     );
 
-    final locationJson = location.toJson();
-    final locationJsonString = jsonEncode(locationJson);
     try {
-      final weatherText = _yumemiWeather.fetchWeather(locationJsonString);
-      final weather = switch (jsonDecode(weatherText)) {
-        final Map<String, dynamic> weatherMap => Weather.fromJson(weatherMap),
-        _ => null,
-      };
-
-      if (weather == null) {
-        const errorMessage = '予期しない天気が取得されました。'
-            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
-        _showWeatherAlertDialog(errorMessage);
-        return;
-      }
-
+      final weather = _weatherRepositry.fetchWeather(location);
       ref.read(weatherNotifierProvider.notifier).update(weather);
     } on YumemiWeatherError catch (e) {
       final errorMessage = switch (e) {
@@ -52,6 +40,10 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
       };
       _showWeatherAlertDialog(errorMessage);
     } on CheckedFromJsonException catch (_) {
+      const errorMessage = '予期しない天気が取得されました。'
+          '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
+      _showWeatherAlertDialog(errorMessage);
+    } on Exception catch (_) {
       const errorMessage = '予期しない天気が取得されました。'
           '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
       _showWeatherAlertDialog(errorMessage);
