@@ -1,2 +1,10 @@
 # https://pub.dev/packages/yumemi_lints
 include: package:yumemi_lints/flutter/3.19.0/recommended.yaml
+
+analyzer:
+  plugins:
+    - custom_lint
+
+linter:
+  rules:
+    use_setters_to_change_properties: false

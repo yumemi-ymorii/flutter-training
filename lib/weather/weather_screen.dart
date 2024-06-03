@@ -1,63 +1,45 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_training/weather/data/weather_exception.dart';
 import 'package:flutter_training/weather/location.dart';
-import 'package:flutter_training/weather/weather.dart';
 import 'package:flutter_training/weather/weather_alert_dialog.dart';
-import 'package:flutter_training/weather/weather_condition.dart';
+import 'package:flutter_training/weather/weather_notifier.dart';
 import 'package:flutter_training/weather/weather_panel.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:yumemi_weather/yumemi_weather.dart';
 
-class WeatherScreen extends StatefulWidget {
+class WeatherScreen extends ConsumerStatefulWidget {
   const WeatherScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() => _WeatherScreen();
+  ConsumerState<WeatherScreen> createState() => _WeatherScreen();
 }
 
-class _WeatherScreen extends State<WeatherScreen> {
-  WeatherCondition? _weatherCodition;
-  int? _weatherMaxTemperature;
-  int? _weatherMinTemperature;
-  final _yumemiWeather = YumemiWeather();
-
+class _WeatherScreen extends ConsumerState<WeatherScreen> {
   void _reloadWeatherCondition() {
     final location = Location(
       area: 'tokyo',
       date: DateTime.parse('2020-04-01T12:00:00+09:00'),
     );
 
-    final locationJson = location.toJson();
-    final locationJsonString = jsonEncode(locationJson);
     try {
-      final weatherText = _yumemiWeather.fetchWeather(locationJsonString);
-      final weather = switch (jsonDecode(weatherText)) {
-        final Map<String, dynamic> weatherMap => Weather.fromJson(weatherMap),
-        _ => null,
-      };
-
-      if (weather == null) {
-        const errorMessage = '予期しない天気が取得されました。'
-            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
-        _showWeatherAlertDialog(errorMessage);
-        return;
-      }
-
-      setState(() {
-        _weatherCodition = weather.condition;
-        _weatherMaxTemperature = weather.maxTemperature;
-        _weatherMinTemperature = weather.minTemperature;
-      });
-    } on YumemiWeatherError catch (e) {
+      ref.read(weatherNotifierProvider.notifier).fetchWeather(location);
+    } on WeatherException catch (e) {
       final errorMessage = switch (e) {
-        YumemiWeatherError.invalidParameter => '「$location」は無効な地域名です',
-        YumemiWeatherError.unknown => '予期せぬエラーが発生しております。'
+        InvalidParameterException() => '「$location」は無効な地域名です',
+        UnkownException() => '予期せぬエラーが発生しております。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。',
+        InvalidResponseException() => '予期せぬエラーが発生しております。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。',
+        JsonDecodeException() => '予期せぬエラーが発生しております。'
             '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。',
       };
       _showWeatherAlertDialog(errorMessage);
     } on CheckedFromJsonException catch (_) {
+      const errorMessage = '予期しない天気が取得されました。'
+          '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
+      _showWeatherAlertDialog(errorMessage);
+    } on Exception catch (_) {
       const errorMessage = '予期しない天気が取得されました。'
           '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
       _showWeatherAlertDialog(errorMessage);
@@ -90,11 +72,7 @@ class _WeatherScreen extends State<WeatherScreen> {
           child: Column(
             children: <Widget>[
               const Spacer(),
-              WeatherPanel(
-                weatherCondition: _weatherCodition,
-                weatherMaxTemperature: _weatherMaxTemperature,
-                weatherMinTemperature: _weatherMinTemperature,
-              ),
+              const WeatherPanel(),
               Flexible(
                 child: Column(
                   children: [
