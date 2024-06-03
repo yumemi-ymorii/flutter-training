@@ -4,6 +4,6 @@ class InvalidParameterException extends WeatherException {}
 
 class UnkownException extends WeatherException {}
 
-class UnexpectedWeatherException extends WeatherException {}
+class InvalidResponseException extends WeatherException {}
 
 class JsonDecodeException extends WeatherException {}
