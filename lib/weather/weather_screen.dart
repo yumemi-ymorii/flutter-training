@@ -29,13 +29,11 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
         InvalidParameterException() => '「$location」は無効な地域名です',
         UnkownException() => '予期せぬエラーが発生しております。'
             '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。',
+        UnexpectedWeatherException() => '予期せぬエラーが発生しております。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。',
       };
       _showWeatherAlertDialog(errorMessage);
     } on CheckedFromJsonException catch (_) {
-      const errorMessage = '予期しない天気が取得されました。'
-          '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
-      _showWeatherAlertDialog(errorMessage);
-    } on Exception catch (_) {
       const errorMessage = '予期しない天気が取得されました。'
           '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
       _showWeatherAlertDialog(errorMessage);

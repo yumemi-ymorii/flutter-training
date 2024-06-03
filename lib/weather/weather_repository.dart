@@ -27,7 +27,7 @@ class WeatherRepository {
       final weatherText = _weatherApi.fetchWeather(locationJsonString);
       return switch (jsonDecode(weatherText)) {
         final Map<String, dynamic> weatherMap => Weather.fromJson(weatherMap),
-        _ => throw Exception(),
+        _ => throw UnexpectedWeatherException(),
       };
     } on YumemiWeatherError catch (e) {
       final weatherException = switch (e) {
