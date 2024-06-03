@@ -31,6 +31,8 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
             '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。',
         UnexpectedWeatherException() => '予期せぬエラーが発生しております。'
             '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。',
+        JsonDecodeException() => '予期せぬエラーが発生しております。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。',
       };
       _showWeatherAlertDialog(errorMessage);
     } on CheckedFromJsonException catch (_) {

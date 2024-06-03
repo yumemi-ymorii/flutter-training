@@ -34,8 +34,9 @@ class WeatherRepository {
         YumemiWeatherError.invalidParameter => InvalidParameterException(),
         YumemiWeatherError.unknown => UnkownException(),
       };
-
       throw weatherException;
+    } on FormatException catch (_) {
+      throw JsonDecodeException();
     }
   }
 }
