@@ -39,6 +39,10 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
       const errorMessage = '予期しない天気が取得されました。'
           '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
       _showWeatherAlertDialog(errorMessage);
+    } on Exception catch (_) {
+      const errorMessage = '予期しない天気が取得されました。'
+          '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
+      _showWeatherAlertDialog(errorMessage);
     }
   }
 
