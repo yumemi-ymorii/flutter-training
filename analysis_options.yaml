@@ -5,6 +5,9 @@ analyzer:
   plugins:
     - custom_lint
 
+  errors:
+    invalid_annotation_target: ignore
+
 linter:
   rules:
     use_setters_to_change_properties: false
