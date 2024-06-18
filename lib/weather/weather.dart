@@ -1,23 +1,17 @@
 import 'package:flutter_training/weather/weather_condition.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'weather.g.dart';
+part 'weather.freezed.dart';
 
-@JsonSerializable()
-class Weather {
-  Weather({
-    required this.condition,
-    required this.maxTemperature,
-    required this.minTemperature,
-  });
+@freezed
+class Weather with _$Weather {
+  const factory Weather({
+    @JsonKey(name: 'weather_condition') required WeatherCondition condition,
+    required int maxTemperature,
+    required int minTemperature,
+  }) = _Weather;
 
   factory Weather.fromJson(Map<String, dynamic> json) =>
       _$WeatherFromJson(json);
-
-  @JsonKey(name: 'weather_condition')
-  final WeatherCondition condition;
-  final int maxTemperature;
-  final int minTemperature;
-
-  Map<String, dynamic> toJson() => _$WeatherToJson(this);
 }
