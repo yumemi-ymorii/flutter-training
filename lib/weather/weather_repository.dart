@@ -24,7 +24,7 @@ class WeatherRepository {
     final locationJsonString = jsonEncode(locationJson);
 
     try {
-      final weatherText = _weatherApi.fetchWeather(locationJsonString);
+      final weatherText = _weatherApi.syncFetchWeather(locationJsonString);
       return switch (jsonDecode(weatherText)) {
         final Map<String, dynamic> weatherMap => Weather.fromJson(weatherMap),
         _ => throw InvalidResponseException(),
