@@ -31,7 +31,7 @@ void main() {
   });
 
   group('weatherRepositoryの正常系テスト', () {
-    test('When WeatherDataSource returns sunny.', () {
+    test('API結果で天気が晴れの場合', () {
       // Arrange
 
       const result = '''
@@ -61,7 +61,7 @@ void main() {
   });
 
   group('weatherRepositoryの異常系テスト', () {
-    test('When Invalidate response', () {
+    test('想定外の形式・値APIレスポンスが返ってきた場合にJsonDecodeExceptionが発生する', () {
       // Arrange
       final mockYumemiWeather = MockYumemiWeather();
       final weatherRepository =
@@ -80,7 +80,7 @@ void main() {
       );
     });
 
-    test('When raised InvalidParameter error', () {
+    test('InvalidParameterError が発生した時に InvalidParameterException をキャッチ', () {
       // Arrange
       final mockYumemiWeather = MockYumemiWeather();
       final weatherRepository =
@@ -99,7 +99,7 @@ void main() {
       );
     });
 
-    test('When raised UnkownException error', () {
+    test('UnkownError が発生した時に UnkownException をキャッチ', () {
       // Arrange
       final mockYumemiWeather = MockYumemiWeather();
       final weatherRepository =
