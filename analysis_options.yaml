@@ -6,6 +6,7 @@ analyzer:
     - custom_lint
 
   errors:
+    # freezedとjson_serializableを組み合わせて使用すると警告が出るため無視する設定を追加
     invalid_annotation_target: ignore
 
 linter:
