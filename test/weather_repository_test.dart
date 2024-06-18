@@ -63,10 +63,6 @@ void main() {
   group('weatherRepositoryの異常系テスト', () {
     test('想定外の形式・値APIレスポンスが返ってきた場合にJsonDecodeExceptionが発生する', () {
       // Arrange
-      final mockYumemiWeather = MockYumemiWeather();
-      final weatherRepository =
-          WeatherRepository(weatherApi: mockYumemiWeather);
-
       const result = '';
       when(mockYumemiWeather.fetchWeather(any)).thenReturn(result);
 
@@ -82,10 +78,6 @@ void main() {
 
     test('InvalidParameterError が発生した時に InvalidParameterException をキャッチ', () {
       // Arrange
-      final mockYumemiWeather = MockYumemiWeather();
-      final weatherRepository =
-          WeatherRepository(weatherApi: mockYumemiWeather);
-
       when(mockYumemiWeather.fetchWeather(any))
           .thenThrow(YumemiWeatherError.invalidParameter);
 
@@ -101,10 +93,6 @@ void main() {
 
     test('UnkownError が発生した時に UnkownException をキャッチ', () {
       // Arrange
-      final mockYumemiWeather = MockYumemiWeather();
-      final weatherRepository =
-          WeatherRepository(weatherApi: mockYumemiWeather);
-
       when(mockYumemiWeather.fetchWeather(any))
           .thenThrow(YumemiWeatherError.unknown);
 
