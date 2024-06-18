@@ -21,12 +21,18 @@ void main() {
   final locationJson = location.toJson();
   jsonEncode(locationJson);
 
+  // テストで共通して使用するmockをあらかじめ作成
+  final mockYumemiWeather = MockYumemiWeather();
+  final weatherRepository = WeatherRepository(weatherApi: mockYumemiWeather);
+
+  // mockの初期化
+  tearDown(() {
+    reset(mockYumemiWeather);
+  });
+
   group('weatherRepositoryの正常系テスト', () {
     test('When WeatherDataSource returns sunny.', () {
       // Arrange
-      final mockYumemiWeather = MockYumemiWeather();
-      final weatherRepository =
-          WeatherRepository(weatherApi: mockYumemiWeather);
 
       const result = '''
 {
