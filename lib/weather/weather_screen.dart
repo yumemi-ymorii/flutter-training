@@ -26,7 +26,7 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
       ref.read(weatherNotifierProvider.notifier).fetchWeather(location);
     } on WeatherException catch (e) {
       final errorMessage = switch (e) {
-        InvalidParameterException() => '「$location」は無効な地域名です',
+        InvalidParameterException() => '「${location.area}」は無効な地域名です',
         UnkownException() => '予期せぬエラーが発生しております。'
             '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。',
         InvalidResponseException() => '予期せぬエラーが発生しております。'
