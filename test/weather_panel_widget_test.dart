@@ -16,6 +16,13 @@ import 'package:mockito/mockito.dart';
 
 import 'weather_panel_widget_test.mocks.dart';
 
+void setUp(WidgetTester tester) {
+  tester.view.devicePixelRatio = 1;
+  // デフォルトはサイズが固定されている（小さい）
+  // 研修で用いた端末のサイズと合わせる
+  tester.view.physicalSize = const Size(1080, 2220);
+}
+
 @GenerateMocks([WeatherRepository])
 void main() {
   final mockWeatherRepository = MockWeatherRepository();
@@ -26,10 +33,7 @@ void main() {
 
   group(' WeatherPanelの正常系テスト', () {
     testWidgets('天気情報が未取得の場合は Placeholder', (tester) async {
-      tester.view.devicePixelRatio = 1;
-      // デフォルトはサイズが固定されている（小さい）
-      // 研修で用いた端末のサイズと合わせる
-      tester.view.physicalSize = const Size(1080, 2220);
+      setUp(tester);
       await tester.pumpWidget(
         const ProviderScope(
           child: MaterialApp(
@@ -55,7 +59,7 @@ void main() {
           maxTemperature: 100,
           minTemperature: 0,
         );
-        tester.view.physicalSize = const Size(1080, 2220);
+        setUp(tester);
 
         when(mockWeatherRepository.fetchWeather(any)).thenReturn(weather);
 
@@ -83,8 +87,7 @@ void main() {
   });
   group(' WeatherPanelの異常テスト', () {
     testWidgets('エラーダイアログ', (tester) async {
-      tester.view.devicePixelRatio = 1;
-      tester.view.physicalSize = const Size(1080, 2220);
+      setUp(tester);
       final location = Location(
         area: 'tokyo',
         date: DateTime.parse('2020-04-24T12:09:46+09:00'),
