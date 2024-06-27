@@ -2,7 +2,7 @@ sealed class WeatherException implements Exception {}
 
 class InvalidParameterException extends WeatherException {}
 
-class UnkownException extends WeatherException {}
+class UnknownException extends WeatherException {}
 
 class InvalidResponseException extends WeatherException {}
 

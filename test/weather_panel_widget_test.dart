@@ -100,7 +100,7 @@ void main() {
       final errorCases = [
         (InvalidParameterException(), '「${location.area}」は無効な地域名です'),
         (
-          UnkownException(),
+          UnknownException(),
           '予期せぬエラーが発生しております。'
               '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
         ),

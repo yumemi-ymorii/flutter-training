@@ -34,7 +34,7 @@ class WeatherRepository {
     } on YumemiWeatherError catch (e) {
       final weatherException = switch (e) {
         YumemiWeatherError.invalidParameter => InvalidParameterException(),
-        YumemiWeatherError.unknown => UnkownException(),
+        YumemiWeatherError.unknown => UnknownException(),
       };
       throw weatherException;
     } on FormatException catch (_) {

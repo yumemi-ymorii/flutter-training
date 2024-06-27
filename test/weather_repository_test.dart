@@ -105,7 +105,7 @@ void main() {
       // Assert
       expect(
         actual,
-        throwsA(const TypeMatcher<UnkownException>()),
+        throwsA(const TypeMatcher<UnknownException>()),
       );
     });
   });
