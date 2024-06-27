@@ -16,13 +16,16 @@ class WeatherScreen extends ConsumerStatefulWidget {
 }
 
 class _WeatherScreen extends ConsumerState<WeatherScreen> {
+  bool shouldShowIndicator = false;
   Future<void> _reloadWeatherCondition() async {
     final location = Location(
       area: 'tokyo',
       date: DateTime.parse('2020-04-01T12:00:00+09:00'),
     );
-
     try {
+      setState(() {
+        shouldShowIndicator = true;
+      });
       await ref.read(weatherNotifierProvider.notifier).fetchWeather(location);
     } on WeatherException catch (e) {
       final errorMessage = switch (e) {
@@ -43,6 +46,10 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
       const errorMessage = '予期しない天気が取得されました。'
           '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
       _showWeatherAlertDialog(errorMessage);
+    } finally {
+      setState(() {
+        shouldShowIndicator = false;
+      });
     }
   }
 
@@ -64,7 +71,7 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final page = Scaffold(
       body: SizedBox.expand(
         child: FractionallySizedBox(
           widthFactor: 0.5,
@@ -88,6 +95,20 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
           ),
         ),
       ),
+    );
+    return Stack(
+      children: [
+        page,
+        Visibility(
+          visible: shouldShowIndicator,
+          child: const SizedBox.expand(
+            child: ColoredBox(
+              color: Colors.black54,
+              child: Center(child: CircularProgressIndicator()),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
