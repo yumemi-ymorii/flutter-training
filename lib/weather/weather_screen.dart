@@ -16,14 +16,14 @@ class WeatherScreen extends ConsumerStatefulWidget {
 }
 
 class _WeatherScreen extends ConsumerState<WeatherScreen> {
-  void _reloadWeatherCondition() {
+  Future<void> _reloadWeatherCondition() async {
     final location = Location(
       area: 'tokyo',
       date: DateTime.parse('2020-04-01T12:00:00+09:00'),
     );
 
     try {
-      ref.read(weatherNotifierProvider.notifier).fetchWeather(location);
+      await ref.read(weatherNotifierProvider.notifier).fetchWeather(location);
     } on WeatherException catch (e) {
       final errorMessage = switch (e) {
         InvalidParameterException() => '「${location.area}」は無効な地域名です',

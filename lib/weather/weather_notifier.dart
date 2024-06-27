@@ -15,8 +15,8 @@ class WeatherNotifier extends _$WeatherNotifier {
     return null;
   }
 
-  void fetchWeather(Location location) {
-    final weather = _weatherRepository.fetchWeather(location);
+  Future<void> fetchWeather(Location location) async {
+    final weather = await _weatherRepository.fetchWeather(location);
     state = weather;
   }
 }
