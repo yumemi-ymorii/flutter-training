@@ -16,7 +16,7 @@ class WeatherScreen extends ConsumerStatefulWidget {
 }
 
 class _WeatherScreen extends ConsumerState<WeatherScreen> {
-  bool shouldShowIndicator = false;
+  bool _shouldShowIndicator = false;
   Future<void> _reloadWeatherCondition() async {
     final location = Location(
       area: 'tokyo',
@@ -24,7 +24,7 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
     );
     try {
       setState(() {
-        shouldShowIndicator = true;
+        _shouldShowIndicator = true;
       });
       await ref.read(weatherNotifierProvider.notifier).fetchWeather(location);
     } on WeatherException catch (e) {
@@ -48,7 +48,7 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
       _showWeatherAlertDialog(errorMessage);
     } finally {
       setState(() {
-        shouldShowIndicator = false;
+        _shouldShowIndicator = false;
       });
     }
   }
@@ -100,7 +100,7 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
       children: [
         page,
         Visibility(
-          visible: shouldShowIndicator,
+          visible: _shouldShowIndicator,
           child: const SizedBox.expand(
             child: ColoredBox(
               color: Colors.black54,
