@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -61,8 +63,9 @@ void main() {
         );
         setUp(tester);
 
+        final completer = Completer<Weather>();
         when(mockWeatherRepository.fetchWeather(any)).thenAnswer(
-          (_) async => weather,
+          (_) => completer.future,
         );
 
         await tester.pumpWidget(
@@ -78,6 +81,11 @@ void main() {
         );
 
         await tester.tap(find.text('Reload'));
+        // 非同期処理を開始(Reloadボタン押下)
+        await tester.pump();
+        // インジケータが表示されているか
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        completer.complete(weather);
         await tester.pumpAndSettle();
 
         final asset = SvgPicture.asset(svg);
