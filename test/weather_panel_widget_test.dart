@@ -61,7 +61,9 @@ void main() {
         );
         setUp(tester);
 
-        when(mockWeatherRepository.fetchWeather(any)).thenReturn(weather);
+        when(mockWeatherRepository.fetchWeather(any)).thenAnswer(
+          (_) async => weather,
+        );
 
         await tester.pumpWidget(
           ProviderScope(
