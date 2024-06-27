@@ -84,6 +84,8 @@ void main() {
         expect(find.svg(asset.bytesLoader), findsOneWidget);
         expect(find.text('100℃'), findsOneWidget);
         expect(find.text('0℃'), findsOneWidget);
+        // インジケータが消えているか
+        expect(find.byType(CircularProgressIndicator), findsNothing);
       });
     }
   });
@@ -156,6 +158,8 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.byType(AlertDialog), findsNothing);
+        // インジケータが消えているか
+        expect(find.byType(CircularProgressIndicator), findsNothing);
       }
     });
   });
