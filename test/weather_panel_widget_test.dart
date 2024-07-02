@@ -80,11 +80,14 @@ void main() {
           ),
         );
 
-        await tester.tap(find.text('Reload'));
         // 非同期処理を開始(Reloadボタン押下)
+        await tester.tap(find.text('Reload'));
         await tester.pump();
+
         // インジケータが表示されているか
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+        // 非同期処理を完了
         completer.complete(weather);
         await tester.pumpAndSettle();
 
@@ -155,11 +158,14 @@ void main() {
           ),
         );
 
-        await tester.tap(find.text('Reload'));
         // 非同期処理を開始(Reloadボタン押下)
+        await tester.tap(find.text('Reload'));
         await tester.pump();
+
         // インジケータが表示されているか
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+        // 非同期処理を完了
         completer.completeError(exception);
         await tester.pumpAndSettle();
 
