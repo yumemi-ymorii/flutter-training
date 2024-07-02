@@ -133,7 +133,9 @@ void main() {
     ];
 
     for (final (exception, errorMessage) in errorCases) {
-      testWidgets('エラーダイアログ', (tester) async {
+      testWidgets(
+          '''${exception.runtimeType} がスローされた場合にダイアログで "$errorMessage" という文言が表示される''',
+          (tester) async {
         setUp(tester);
         final completer = Completer<Weather>();
         when(mockWeatherRepository.fetchWeather(any)).thenAnswer(
