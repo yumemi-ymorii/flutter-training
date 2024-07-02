@@ -98,43 +98,43 @@ void main() {
     }
   });
   group(' WeatherPanelの異常テスト', () {
-    testWidgets('エラーダイアログ', (tester) async {
-      setUp(tester);
-      final location = Location(
-        area: 'tokyo',
-        date: DateTime.parse('2020-04-24T12:09:46+09:00'),
-      );
+    final location = Location(
+      area: 'tokyo',
+      date: DateTime.parse('2020-04-24T12:09:46+09:00'),
+    );
 
-      final errorCases = [
-        (InvalidParameterException(), '「${location.area}」は無効な地域名です'),
-        (
-          UnknownException(),
-          '予期せぬエラーが発生しております。'
-              '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
-        ),
-        (
-          InvalidResponseException(),
-          '予期せぬエラーが発生しております。'
-              '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
-        ),
-        (
-          JsonDecodeException(),
-          '予期せぬエラーが発生しております。'
-              '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
-        ),
-        (
-          CheckedFromJsonException({}, null, '', null),
-          '予期しない天気が取得されました。'
-              '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
-        ),
-        (
-          Exception(),
-          '予期しない天気が取得されました。'
-              '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
-        ),
-      ];
+    final errorCases = [
+      (InvalidParameterException(), '「${location.area}」は無効な地域名です'),
+      (
+        UnknownException(),
+        '予期せぬエラーが発生しております。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
+      ),
+      (
+        InvalidResponseException(),
+        '予期せぬエラーが発生しております。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
+      ),
+      (
+        JsonDecodeException(),
+        '予期せぬエラーが発生しております。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
+      ),
+      (
+        CheckedFromJsonException({}, null, '', null),
+        '予期しない天気が取得されました。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
+      ),
+      (
+        Exception(),
+        '予期しない天気が取得されました。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
+      ),
+    ];
 
-      for (final (exception, errorMessage) in errorCases) {
+    for (final (exception, errorMessage) in errorCases) {
+      testWidgets('エラーダイアログ', (tester) async {
+        setUp(tester);
         final completer = Completer<Weather>();
         when(mockWeatherRepository.fetchWeather(any)).thenAnswer(
           (_) => completer.future,
@@ -175,7 +175,7 @@ void main() {
         expect(find.byType(AlertDialog), findsNothing);
         // インジケータが消えているか
         expect(find.byType(CircularProgressIndicator), findsNothing);
-      }
-    });
+      });
+    }
   });
 }
