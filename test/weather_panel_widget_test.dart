@@ -97,7 +97,7 @@ void main() {
       });
     }
   });
-  group(' WeatherPanelの異常テスト', () {
+  group(' WeatherPanelの異常系テスト', () {
     final location = Location(
       area: 'tokyo',
       date: DateTime.parse('2020-04-24T12:09:46+09:00'),
