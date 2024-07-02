@@ -135,7 +135,10 @@ void main() {
       ];
 
       for (final (exception, errorMessage) in errorCases) {
-        when(mockWeatherRepository.fetchWeather(any)).thenThrow(exception);
+        final completer = Completer<Weather>();
+        when(mockWeatherRepository.fetchWeather(any)).thenAnswer(
+          (_) => completer.future,
+        );
 
         await tester.pumpWidget(
           ProviderScope(
@@ -150,8 +153,12 @@ void main() {
           ),
         );
 
-        //  Reloadを押下して描画完了まで待機
         await tester.tap(find.text('Reload'));
+        // 非同期処理を開始(Reloadボタン押下)
+        await tester.pump();
+        // インジケータが表示されているか
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        completer.completeError(exception);
         await tester.pumpAndSettle();
 
         expect(find.byType(AlertDialog), findsOneWidget);
