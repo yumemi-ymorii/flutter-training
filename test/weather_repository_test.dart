@@ -31,7 +31,7 @@ void main() {
   });
 
   group('weatherRepositoryの正常系テスト', () {
-    test('API結果で天気が晴れの場合', () {
+    test('API結果で天気が晴れの場合', () async {
       // Arrange
 
       const result = '''
@@ -41,7 +41,7 @@ void main() {
   "min_temperature":3,
   "date":"2020-04-01T12:00:00+09:00"
 }''';
-      when(mockYumemiWeather.fetchWeather(any)).thenReturn(result);
+      when(mockYumemiWeather.syncFetchWeather(any)).thenReturn(result);
 
       const expected = Weather(
         condition: WeatherCondition.sunny,
@@ -50,7 +50,7 @@ void main() {
       );
 
       // Act
-      final actual = weatherRepository.fetchWeather(location);
+      final actual = await weatherRepository.fetchWeather(location);
 
       // Assert
       expect(
@@ -64,10 +64,11 @@ void main() {
     test('想定外の形式・値APIレスポンスが返ってきた場合にJsonDecodeExceptionが発生する', () {
       // Arrange
       const result = '';
-      when(mockYumemiWeather.fetchWeather(any)).thenReturn(result);
+      when(mockYumemiWeather.syncFetchWeather(any)).thenReturn(result);
 
       // Act
-      Weather actual() => weatherRepository.fetchWeather(location);
+      Future<Weather> actual() async =>
+          weatherRepository.fetchWeather(location);
 
       // Assert
       expect(
@@ -78,11 +79,12 @@ void main() {
 
     test('InvalidParameterError が発生した時に InvalidParameterException をキャッチ', () {
       // Arrange
-      when(mockYumemiWeather.fetchWeather(any))
+      when(mockYumemiWeather.syncFetchWeather(any))
           .thenThrow(YumemiWeatherError.invalidParameter);
 
       // Act
-      Weather actual() => weatherRepository.fetchWeather(location);
+      Future<Weather> actual() async =>
+          weatherRepository.fetchWeather(location);
 
       // Assert
       expect(
@@ -93,16 +95,17 @@ void main() {
 
     test('UnkownError が発生した時に UnkownException をキャッチ', () {
       // Arrange
-      when(mockYumemiWeather.fetchWeather(any))
+      when(mockYumemiWeather.syncFetchWeather(any))
           .thenThrow(YumemiWeatherError.unknown);
 
       // Act
-      Weather actual() => weatherRepository.fetchWeather(location);
+      Future<Weather> actual() async =>
+          weatherRepository.fetchWeather(location);
 
       // Assert
       expect(
         actual,
-        throwsA(const TypeMatcher<UnkownException>()),
+        throwsA(const TypeMatcher<UnknownException>()),
       );
     });
   });

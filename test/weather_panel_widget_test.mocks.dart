@@ -3,7 +3,9 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter_training/weather/location.dart' as _i4;
+import 'dart:async' as _i4;
+
+import 'package:flutter_training/weather/location.dart' as _i5;
 import 'package:flutter_training/weather/weather.dart' as _i2;
 import 'package:flutter_training/weather/weather_repository.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
@@ -40,17 +42,18 @@ class MockWeatherRepository extends _i1.Mock implements _i3.WeatherRepository {
   }
 
   @override
-  _i2.Weather fetchWeather(_i4.Location? location) => (super.noSuchMethod(
+  _i4.Future<_i2.Weather> fetchWeather(_i5.Location? location) =>
+      (super.noSuchMethod(
         Invocation.method(
           #fetchWeather,
           [location],
         ),
-        returnValue: _FakeWeather_0(
+        returnValue: _i4.Future<_i2.Weather>.value(_FakeWeather_0(
           this,
           Invocation.method(
             #fetchWeather,
             [location],
           ),
-        ),
-      ) as _i2.Weather);
+        )),
+      ) as _i4.Future<_i2.Weather>);
 }

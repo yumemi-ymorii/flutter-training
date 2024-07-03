@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -61,7 +63,10 @@ void main() {
         );
         setUp(tester);
 
-        when(mockWeatherRepository.fetchWeather(any)).thenReturn(weather);
+        final completer = Completer<Weather>();
+        when(mockWeatherRepository.fetchWeather(any)).thenAnswer(
+          (_) => completer.future,
+        );
 
         await tester.pumpWidget(
           ProviderScope(
@@ -75,55 +80,71 @@ void main() {
           ),
         );
 
+        // 非同期処理を開始(Reloadボタン押下)
         await tester.tap(find.text('Reload'));
+        await tester.pump();
+
+        // インジケータが表示されているか
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+        // 非同期処理を完了
+        completer.complete(weather);
         await tester.pumpAndSettle();
 
         final asset = SvgPicture.asset(svg);
         expect(find.svg(asset.bytesLoader), findsOneWidget);
         expect(find.text('100℃'), findsOneWidget);
         expect(find.text('0℃'), findsOneWidget);
+        // インジケータが消えているか
+        expect(find.byType(CircularProgressIndicator), findsNothing);
       });
     }
   });
   group(' WeatherPanelの異常テスト', () {
-    testWidgets('エラーダイアログ', (tester) async {
-      setUp(tester);
-      final location = Location(
-        area: 'tokyo',
-        date: DateTime.parse('2020-04-24T12:09:46+09:00'),
-      );
+    final location = Location(
+      area: 'tokyo',
+      date: DateTime.parse('2020-04-24T12:09:46+09:00'),
+    );
 
-      final errorCases = [
-        (InvalidParameterException(), '「${location.area}」は無効な地域名です'),
-        (
-          UnkownException(),
-          '予期せぬエラーが発生しております。'
-              '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
-        ),
-        (
-          InvalidResponseException(),
-          '予期せぬエラーが発生しております。'
-              '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
-        ),
-        (
-          JsonDecodeException(),
-          '予期せぬエラーが発生しております。'
-              '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
-        ),
-        (
-          CheckedFromJsonException({}, null, '', null),
-          '予期しない天気が取得されました。'
-              '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
-        ),
-        (
-          Exception(),
-          '予期しない天気が取得されました。'
-              '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
-        ),
-      ];
+    final errorCases = [
+      (InvalidParameterException(), '「${location.area}」は無効な地域名です'),
+      (
+        UnknownException(),
+        '予期せぬエラーが発生しております。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
+      ),
+      (
+        InvalidResponseException(),
+        '予期せぬエラーが発生しております。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
+      ),
+      (
+        JsonDecodeException(),
+        '予期せぬエラーが発生しております。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
+      ),
+      (
+        CheckedFromJsonException({}, null, '', null),
+        '予期しない天気が取得されました。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
+      ),
+      (
+        Exception(),
+        '予期しない天気が取得されました。'
+            '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。'
+      ),
+    ];
 
-      for (final (exception, errorMessage) in errorCases) {
-        when(mockWeatherRepository.fetchWeather(any)).thenThrow(exception);
+    for (final (exception, errorMessage) in errorCases) {
+      testWidgets(
+          '''${exception.runtimeType}がスローされた場合にダイアログで "$errorMessage" という文言が表示される''',
+          (tester) async {
+        setUp(tester);
+
+        final completer = Completer<Weather>();
+        when(mockWeatherRepository.fetchWeather(any)).thenAnswer(
+          (_) => completer.future,
+        );
 
         await tester.pumpWidget(
           ProviderScope(
@@ -138,8 +159,15 @@ void main() {
           ),
         );
 
-        //  Reloadを押下して描画完了まで待機
+        // 非同期処理を開始(Reloadボタン押下)
         await tester.tap(find.text('Reload'));
+        await tester.pump();
+
+        // インジケータが表示されているか
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+        // 非同期処理を完了
+        completer.completeError(exception);
         await tester.pumpAndSettle();
 
         expect(find.byType(AlertDialog), findsOneWidget);
@@ -154,7 +182,9 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.byType(AlertDialog), findsNothing);
-      }
-    });
+        // インジケータが消えているか
+        expect(find.byType(CircularProgressIndicator), findsNothing);
+      });
+    }
   });
 }

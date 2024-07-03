@@ -16,18 +16,21 @@ class WeatherScreen extends ConsumerStatefulWidget {
 }
 
 class _WeatherScreen extends ConsumerState<WeatherScreen> {
-  void _reloadWeatherCondition() {
+  bool _shouldShowIndicator = false;
+  Future<void> _reloadWeatherCondition() async {
     final location = Location(
       area: 'tokyo',
       date: DateTime.parse('2020-04-01T12:00:00+09:00'),
     );
-
     try {
-      ref.read(weatherNotifierProvider.notifier).fetchWeather(location);
+      setState(() {
+        _shouldShowIndicator = true;
+      });
+      await ref.read(weatherNotifierProvider.notifier).fetchWeather(location);
     } on WeatherException catch (e) {
       final errorMessage = switch (e) {
         InvalidParameterException() => '「${location.area}」は無効な地域名です',
-        UnkownException() => '予期せぬエラーが発生しております。'
+        UnknownException() => '予期せぬエラーが発生しております。'
             '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。',
         InvalidResponseException() => '予期せぬエラーが発生しております。'
             '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。',
@@ -43,6 +46,10 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
       const errorMessage = '予期しない天気が取得されました。'
           '時間を置いてもエラーが発生する場合はお問い合わせお願いいたします。';
       _showWeatherAlertDialog(errorMessage);
+    } finally {
+      setState(() {
+        _shouldShowIndicator = false;
+      });
     }
   }
 
@@ -64,7 +71,7 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final page = Scaffold(
       body: SizedBox.expand(
         child: FractionallySizedBox(
           widthFactor: 0.5,
@@ -88,6 +95,20 @@ class _WeatherScreen extends ConsumerState<WeatherScreen> {
           ),
         ),
       ),
+    );
+    return Stack(
+      children: [
+        page,
+        Visibility(
+          visible: _shouldShowIndicator,
+          child: const SizedBox.expand(
+            child: ColoredBox(
+              color: Colors.black54,
+              child: Center(child: CircularProgressIndicator()),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
